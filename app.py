@@ -11,7 +11,7 @@ st.set_page_config(page_title="Diabetes Dashboard", layout="wide")
 # Load and clean dataset
 @st.cache_data
 def load_data():
-    df = pd.read_csv("health care diabetes.csv")
+    df = pd.read_csv("healthcarediabetes.csv")
 
     # Replace invalid zeros with NaN
     invalid_zero_cols = ["Glucose", "BloodPressure", "SkinThickness", "Insulin", "BMI"]
