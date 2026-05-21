@@ -16,7 +16,7 @@ st.set_page_config(page_title="Diabetes Dashboard", layout="wide")
 st.markdown("""
 <style>
 .stApp {
-    background-color: #f0f4ff;
+    background-color: #ecfdf5;
 }
 </style>
 """, unsafe_allow_html=True)
