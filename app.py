@@ -112,6 +112,8 @@ ax4.set_xlabel("Outcome (0 = No Diabetes, 1 = Diabetes)")
 ax4.set_ylabel("Count")
 st.pyplot(fig4)
 
+st.markdown("---")
+
 # 1. Correlation Heatmap
 st.subheader("Correlation Heatmap")
 fig, ax = plt.subplots(figsize=(10,6))
@@ -156,29 +158,29 @@ st.markdown("---")
 
 # 5. Feature Importance (Random Forest)
 st.subheader("Feature Importance (Random Forest)")
-df_clean = df.dropna()
-X = df_clean.drop("Outcome", axis=1)
-y = df_clean["Outcome"]
+
+df_fi = df.dropna()
+X_fi = df_fi.drop("Outcome", axis=1)
+y_fi = df_fi["Outcome"]
 
 from sklearn.ensemble import RandomForestClassifier
-model = RandomForestClassifier()
-model.fit(X, y)
+model_fi = RandomForestClassifier()
+model_fi.fit(X_fi, y_fi)
 
-importances = pd.Series(model.feature_importances_, index=X.columns)
+importances = pd.Series(model_fi.feature_importances_, index=X_fi.columns)
 fig, ax = plt.subplots()
 importances.sort_values().plot(kind="barh", ax=ax)
 st.pyplot(fig)
-# ---------------------------------------------------------
+
+st.markdown("---")
+
 # DOWNLOAD CLEANED DATA
-# ---------------------------------------------------------
 st.subheader("Download Cleaned Data")
 st.download_button("Download Cleaned Data", df.to_csv().encode(), "cleaned_data.csv")
 
 st.markdown("---")
 
-# ---------------------------------------------------------
 # INTERACTIVE SCATTER PLOT (PLOTLY)
-# ---------------------------------------------------------
 import plotly.express as px
 
 st.subheader("Interactive Scatter Plot (Plotly)")
@@ -187,52 +189,39 @@ st.plotly_chart(fig)
 
 st.markdown("---")
 
-# ---------------------------------------------------------
 # INTERACTIVE HISTOGRAM (PLOTLY)
-# ---------------------------------------------------------
 st.subheader("Interactive Histogram (Plotly)")
 fig = px.histogram(df, x=col_choice, nbins=30, color="Outcome")
 st.plotly_chart(fig)
 
 st.markdown("---")
 
-# ---------------------------------------------------------
 # MODEL PERFORMANCE (SCIKIT-LEARN)
-# ---------------------------------------------------------
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score, confusion_matrix
 
 st.subheader("Model Performance (Random Forest)")
 
-# Drop rows with missing values BEFORE training
 df_model = df.dropna()
-
-# Define X and y ONLY from the cleaned dataset
 X = df_model.drop("Outcome", axis=1)
 y = df_model["Outcome"]
 
-# Train-test split
 X_train, X_test, y_train, y_test = train_test_split(
     X, y, test_size=0.2, random_state=42
 )
 
-# Train model
 model = RandomForestClassifier()
 model.fit(X_train, y_train)
 
-# Predictions
 y_pred = model.predict(X_test)
 
-# Accuracy
 st.write("Accuracy:", accuracy_score(y_test, y_pred))
 
-# Confusion matrix
 cm = confusion_matrix(y_test, y_pred)
 fig, ax = plt.subplots()
 sns.heatmap(cm, annot=True, fmt="d", cmap="Blues", ax=ax)
 st.pyplot(fig)
 
 st.markdown("---")
-
 
 st.caption("Dashboard built with Streamlit using the Pima Indians Diabetes dataset.")
