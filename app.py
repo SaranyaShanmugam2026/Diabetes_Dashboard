@@ -207,25 +207,32 @@ st.subheader("Model Performance (Random Forest)")
 # Drop rows with missing values BEFORE training
 df_model = df.dropna()
 
+# Define X and y ONLY from the cleaned dataset
 X = df_model.drop("Outcome", axis=1)
 y = df_model["Outcome"]
 
+# Train-test split
 X_train, X_test, y_train, y_test = train_test_split(
     X, y, test_size=0.2, random_state=42
 )
 
+# Train model
 model = RandomForestClassifier()
 model.fit(X_train, y_train)
 
+# Predictions
 y_pred = model.predict(X_test)
 
+# Accuracy
 st.write("Accuracy:", accuracy_score(y_test, y_pred))
 
+# Confusion matrix
 cm = confusion_matrix(y_test, y_pred)
 fig, ax = plt.subplots()
 sns.heatmap(cm, annot=True, fmt="d", cmap="Blues", ax=ax)
 st.pyplot(fig)
 
 st.markdown("---")
+
 
 st.caption("Dashboard built with Streamlit using the Pima Indians Diabetes dataset.")
