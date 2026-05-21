@@ -14,16 +14,11 @@ from sklearn.metrics import accuracy_score, confusion_matrix
 # ---------------------------------------------------------
 st.set_page_config(page_title="Diabetes Dashboard", layout="wide")
 st.markdown("""
-<div style="
-background:linear-gradient(90deg,#0ea5e9,#2563eb,#7c3aed);
-padding:25px;
-border-radius:20px;
-color:white;
-text-align:center;
-margin-bottom:20px;">
-<h1>📊 Diabetes Outlier & Analysis Dashboard</h1>
-<p>Explore outliers, analyze patterns, interact with charts, and evaluate ML models</p>
-</div>
+<style>
+.stApp {
+    background-color: #f0f4ff;
+}
+</style>
 """, unsafe_allow_html=True)
 
 # ---------------------------------------------------------
