@@ -228,5 +228,4 @@ st.pyplot(fig)
 
 st.markdown("---")
 
-
 st.caption("Dashboard built with Streamlit using the Pima Indians Diabetes dataset.")
