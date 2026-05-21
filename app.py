@@ -204,7 +204,15 @@ from sklearn.metrics import accuracy_score, confusion_matrix
 
 st.subheader("Model Performance (Random Forest)")
 
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+# Drop rows with missing values BEFORE training
+df_model = df.dropna()
+
+X = df_model.drop("Outcome", axis=1)
+y = df_model["Outcome"]
+
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=42
+)
 
 model = RandomForestClassifier()
 model.fit(X_train, y_train)
