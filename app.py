@@ -142,7 +142,7 @@ elif page == "outliers":
 
     # Histogram
     st.subheader(f"Histogram of {col_choice}")
-    fig, ax = plt.subplots()
+   fig, ax = plt.subplots(figsize=(5, 3))
     sns.histplot(df[col_choice].dropna(), kde=True, ax=ax)
     st.pyplot(fig)
 
