@@ -16,10 +16,12 @@ st.set_page_config(page_title="Diabetes Dashboard", layout="wide")
 st.markdown("""
 <style>
 .stApp {
-    background-color: #ecfdf5;
+    background: linear-gradient(135deg, #e0f2fe, #f0f9ff, #e0e7ff);
+    background-attachment: fixed;
 }
 </style>
 """, unsafe_allow_html=True)
+
 
 # ---------------------------------------------------------
 # LOAD DATA
