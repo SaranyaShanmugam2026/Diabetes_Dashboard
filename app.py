@@ -209,7 +209,7 @@ elif page == "analysis":
 
     # Distribution by outcome
     st.subheader(f"{col_choice} Distribution by Outcome")
-    fig6, ax6 =( plt.subplots(5,3))
+    fig6, ax6 = plt.subplots()
     sns.kdeplot(data=df, x=col_choice, hue="Outcome", fill=True, ax=ax6)
     st.pyplot(fig6)
 
@@ -219,7 +219,7 @@ elif page == "analysis":
     st.subheader("BMI Category Distribution")
     df["BMI_Category"] = pd.cut(df["BMI"], bins=[0,18.5,25,30,100],
                                 labels=["Underweight","Normal","Overweight","Obese"])
-    fig7, ax7 = (plt.subplots(5,3))
+    fig7, ax7 = plt.subplots(5,3)
     sns.countplot(x="BMI_Category", data=df, ax=ax7)
     st.pyplot(fig7)
 
@@ -229,7 +229,7 @@ elif page == "analysis":
     st.subheader("Age Group Distribution")
     df["Age_Group"] = pd.cut(df["Age"], bins=[20,30,40,50,60,80],
                              labels=["20-30","30-40","40-50","50-60","60+"])
-    fig8, ax8 = (plt.subplots(5,3))
+    fig8, ax8 = plt.subplots()
     sns.countplot(x="Age_Group", hue="Outcome", data=df, ax=ax8)
     st.pyplot(fig8)
 
@@ -248,7 +248,7 @@ elif page == "analysis":
     model_fi.fit(X_fi, y_fi)
 
     importances = pd.Series(model_fi.feature_importances_, index=X_fi.columns)
-    fig9, ax9 = (plt.subplots(5,3))
+    fig9, ax9 = plt.subplots()
     importances.sort_values().plot(kind="barh", ax=ax9)
     st.pyplot(fig9)
 
