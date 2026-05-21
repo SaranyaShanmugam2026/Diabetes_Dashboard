@@ -158,7 +158,7 @@ elif page == "outliers":
 
     outliers_iqr = df[(df[col_choice] < lower) | (df[col_choice] > upper)]
 
-    fig2, ax2 = plt.subplots()
+    fig2, ax2 = plt.subplots((5,3))
     sns.boxplot(x=df[col_choice], ax=ax2)
     st.pyplot(fig2)
 
@@ -175,7 +175,7 @@ elif page == "outliers":
 
     outliers_z = df_clean[np.abs(z_scores) > z_threshold]
 
-    fig3, ax3 = plt.subplots()
+    fig3, ax3 = plt.subplots((5,3))
     ax3.scatter(df_clean.index, df_clean[col_choice], alpha=0.6)
     ax3.scatter(outliers_z.index, outliers_z[col_choice], color="red")
     st.pyplot(fig3)
