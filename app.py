@@ -24,6 +24,42 @@ df = load_data()
 st.title("📊 Diabetes Dataset – Outlier Exploration Dashboard")
 st.write("This interactive dashboard helps explore outliers using Histogram, Boxplot (IQR), and Z‑score methods.")
 
+st.markdown("### 📌 Navigation")
+
+nav = st.columns(6)
+
+page = None
+
+with nav[0]:
+    if st.button("Home"):
+        page = "home"
+
+with nav[1]:
+    if st.button("Cleaning"):
+        page = "cleaning"
+
+with nav[2]:
+    if st.button("Exploration"):
+        page = "exploration"
+
+with nav[3]:
+    if st.button("Analysis"):
+        page = "analysis"
+
+with nav[4]:
+    if st.button("Interactive"):
+        page = "interactive"
+
+with nav[5]:
+    if st.button("Model"):
+        page = "model"
+
+# default page
+if page is None:
+    page = "home"
+
+st.markdown("---")
+
 # Sidebar controls
 st.sidebar.header("Controls")
 col_choice = st.sidebar.selectbox("Select a column to explore", df.columns[:-1])
