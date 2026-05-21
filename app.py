@@ -9,6 +9,15 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score, confusion_matrix
 
+plt.rcParams.update({
+    "font.size": 9,        # default was 12
+    "axes.titlesize": 11,
+    "axes.labelsize": 10,
+    "xtick.labelsize": 8,
+    "ytick.labelsize": 8,
+})
+sns.set_context("paper", font_scale=0.8)
+
 # ---------------------------------------------------------
 # PAGE CONFIG
 # ---------------------------------------------------------
@@ -149,7 +158,7 @@ elif page == "outliers":
 
     outliers_iqr = df[(df[col_choice] < lower) | (df[col_choice] > upper)]
 
-    fig2, ax2 = plt.subplots()
+    fig2, ax2 = plt.subplots(5,3)
     sns.boxplot(x=df[col_choice], ax=ax2)
     st.pyplot(fig2)
 
