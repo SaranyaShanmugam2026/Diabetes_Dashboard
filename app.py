@@ -158,7 +158,7 @@ elif page == "outliers":
 
     outliers_iqr = df[(df[col_choice] < lower) | (df[col_choice] > upper)]
 
-    fig2, ax2 = plt.subplots(5,3)
+    fig2, ax2 = plt.subplots()
     sns.boxplot(x=df[col_choice], ax=ax2)
     st.pyplot(fig2)
 
@@ -198,7 +198,7 @@ elif page == "analysis":
 
     # Correlation heatmap
     st.subheader("Correlation Heatmap")
-    fig5, ax5 = plt.subplots(figsize=(10,6))
+    fig5, ax5 = plt.subplots(figsize=(5,3))
     sns.heatmap(df.corr(), annot=True, cmap="coolwarm", ax=ax5)
     st.pyplot(fig5)
 
