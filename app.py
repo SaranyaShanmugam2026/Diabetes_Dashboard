@@ -159,8 +159,16 @@ st.markdown("---")
 # 5. Feature Importance (Random Forest)
 st.subheader("Feature Importance (Random Forest)")
 
+# Drop rows with missing values
 df_fi = df.dropna()
-X_fi = df_fi.drop("Outcome", axis=1)
+
+# Use only numeric columns for features
+numeric_cols = df_fi.select_dtypes(include=[np.number]).columns.tolist()
+
+# Remove the target column from features
+numeric_cols.remove("Outcome")
+
+X_fi = df_fi[numeric_cols]
 y_fi = df_fi["Outcome"]
 
 from sklearn.ensemble import RandomForestClassifier
@@ -171,12 +179,6 @@ importances = pd.Series(model_fi.feature_importances_, index=X_fi.columns)
 fig, ax = plt.subplots()
 importances.sort_values().plot(kind="barh", ax=ax)
 st.pyplot(fig)
-
-st.markdown("---")
-
-# DOWNLOAD CLEANED DATA
-st.subheader("Download Cleaned Data")
-st.download_button("Download Cleaned Data", df.to_csv().encode(), "cleaned_data.csv")
 
 st.markdown("---")
 
