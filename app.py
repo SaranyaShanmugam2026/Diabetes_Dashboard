@@ -112,4 +112,63 @@ ax4.set_xlabel("Outcome (0 = No Diabetes, 1 = Diabetes)")
 ax4.set_ylabel("Count")
 st.pyplot(fig4)
 
+# 1. Correlation Heatmap
+st.subheader("Correlation Heatmap")
+fig, ax = plt.subplots(figsize=(10,6))
+sns.heatmap(df.corr(), annot=True, cmap="coolwarm", ax=ax)
+st.pyplot(fig)
+
+st.markdown("---")
+
+# 2. Distribution by Outcome
+st.subheader(f"{col_choice} Distribution by Outcome")
+fig, ax = plt.subplots()
+sns.kdeplot(data=df, x=col_choice, hue="Outcome", fill=True, ax=ax)
+st.pyplot(fig)
+
+st.markdown("---")
+
+# 3. BMI Category Analysis
+st.subheader("BMI Category Distribution")
+df["BMI_Category"] = pd.cut(
+    df["BMI"],
+    bins=[0, 18.5, 25, 30, 100],
+    labels=["Underweight", "Normal", "Overweight", "Obese"]
+)
+fig, ax = plt.subplots()
+sns.countplot(x="BMI_Category", data=df, ax=ax)
+st.pyplot(fig)
+
+st.markdown("---")
+
+# 4. Age Group Analysis
+st.subheader("Age Group Distribution")
+df["Age_Group"] = pd.cut(
+    df["Age"],
+    bins=[20,30,40,50,60,80],
+    labels=["20-30","30-40","40-50","50-60","60+"]
+)
+fig, ax = plt.subplots()
+sns.countplot(x="Age_Group", hue="Outcome", data=df, ax=ax)
+st.pyplot(fig)
+
+st.markdown("---")
+
+# 5. Feature Importance (Random Forest)
+st.subheader("Feature Importance (Random Forest)")
+df_clean = df.dropna()
+X = df_clean.drop("Outcome", axis=1)
+y = df_clean["Outcome"]
+
+from sklearn.ensemble import RandomForestClassifier
+model = RandomForestClassifier()
+model.fit(X, y)
+
+importances = pd.Series(model.feature_importances_, index=X.columns)
+fig, ax = plt.subplots()
+importances.sort_values().plot(kind="barh", ax=ax)
+st.pyplot(fig)
+
+
+
 st.caption("Dashboard built with Streamlit using the Pima Indians Diabetes dataset.")
