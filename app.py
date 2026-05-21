@@ -142,7 +142,7 @@ elif page == "outliers":
 
     # Histogram
     st.subheader(f"Histogram of {col_choice}")
-   fig, ax = plt.subplots(figsize=(5, 3))
+    fig, ax = plt.subplots(figsize=(5, 3))
     sns.histplot(df[col_choice].dropna(), kde=True, ax=ax)
     st.pyplot(fig)
 
@@ -190,7 +190,7 @@ elif page == "analysis":
 
     # Outcome distribution
     st.subheader("Outcome Distribution")
-    fig4, ax4 = plt.subplots()
+    fig4, ax4 = plt.subplots((5,3))
     sns.countplot(x="Outcome", data=df, ax=ax4)
     st.pyplot(fig4)
 
@@ -206,7 +206,7 @@ elif page == "analysis":
 
     # Distribution by outcome
     st.subheader(f"{col_choice} Distribution by Outcome")
-    fig6, ax6 = plt.subplots()
+    fig6, ax6 = plt.subplots((5,3))
     sns.kdeplot(data=df, x=col_choice, hue="Outcome", fill=True, ax=ax6)
     st.pyplot(fig6)
 
@@ -216,7 +216,7 @@ elif page == "analysis":
     st.subheader("BMI Category Distribution")
     df["BMI_Category"] = pd.cut(df["BMI"], bins=[0,18.5,25,30,100],
                                 labels=["Underweight","Normal","Overweight","Obese"])
-    fig7, ax7 = plt.subplots()
+    fig7, ax7 = plt.subplots((5,3))
     sns.countplot(x="BMI_Category", data=df, ax=ax7)
     st.pyplot(fig7)
 
@@ -226,7 +226,7 @@ elif page == "analysis":
     st.subheader("Age Group Distribution")
     df["Age_Group"] = pd.cut(df["Age"], bins=[20,30,40,50,60,80],
                              labels=["20-30","30-40","40-50","50-60","60+"])
-    fig8, ax8 = plt.subplots()
+    fig8, ax8 = plt.subplots((5,3))
     sns.countplot(x="Age_Group", hue="Outcome", data=df, ax=ax8)
     st.pyplot(fig8)
 
@@ -245,7 +245,7 @@ elif page == "analysis":
     model_fi.fit(X_fi, y_fi)
 
     importances = pd.Series(model_fi.feature_importances_, index=X_fi.columns)
-    fig9, ax9 = plt.subplots()
+    fig9, ax9 = plt.subplots((5,3))
     importances.sort_values().plot(kind="barh", ax=ax9)
     st.pyplot(fig9)
 
