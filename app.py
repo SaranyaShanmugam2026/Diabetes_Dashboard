@@ -10,7 +10,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score, confusion_matrix
 
 plt.rcParams.update({
-    "font.size": 9,        # default was 12
+    "font.size": 9,       
     "axes.titlesize": 11,
     "axes.labelsize": 10,
     "xtick.labelsize": 8,
