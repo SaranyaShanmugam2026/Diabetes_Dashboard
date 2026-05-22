@@ -136,7 +136,7 @@ elif page == "cleaning":
     st.dataframe(df.isna().sum())
 
 # ---------------------------------------------------------
-# OUTLIERS PAGE (WITH FORM)
+# OUTLIERS PAGE (WITH FORM + IQR + Z-SCORE)
 # ---------------------------------------------------------
 elif page == "outliers":
 
@@ -144,34 +144,66 @@ elif page == "outliers":
 
     # Outlier Detection Form
     with st.form("outlier_form"):
-        st.write("Select a column and threshold to detect outliers:")
+        st.write("Select a column and method to detect outliers:")
 
         col_choice = st.selectbox("Select column", df.columns[:-1])
-        z_threshold = st.slider("Z-score threshold", 2.0, 4.0, 3.0, 0.5)
+
+        method = st.radio(
+            "Choose Outlier Detection Method",
+            ["IQR Method", "Z-score Method"]
+        )
+
+        # Only show Z-score slider if Z-score method is selected
+        if method == "Z-score Method":
+            z_threshold = st.slider("Z-score threshold", 2.0, 4.0, 3.0, 0.5)
 
         detect_btn = st.form_submit_button("Detect Outliers")
 
+    # When user clicks Detect
     if detect_btn:
 
-        # Clean data for selected column
         df_clean = df.dropna(subset=[col_choice])
-        z_scores = zscore(df_clean[col_choice])
 
-        # Detect outliers
-        outliers = df_clean[np.abs(z_scores) > z_threshold]
+        # -----------------------------
+        # IQR METHOD
+        # -----------------------------
+        if method == "IQR Method":
+            Q1 = df_clean[col_choice].quantile(0.25)
+            Q3 = df_clean[col_choice].quantile(0.75)
+            IQR = Q3 - Q1
+            lower = Q1 - 1.5 * IQR
+            upper = Q3 + 1.5 * IQR
 
-        st.success(f"Outliers detected: {outliers.shape[0]}")
+            outliers = df_clean[(df_clean[col_choice] < lower) | (df_clean[col_choice] > upper)]
+
+            st.info(f"IQR Range: {lower:.2f} to {upper:.2f}")
+            st.success(f"Outliers detected: {outliers.shape[0]}")
+
+            # Boxplot
+            fig, ax = plt.subplots(figsize=(5, 3))
+            sns.boxplot(x=df_clean[col_choice], ax=ax)
+            ax.set_title(f"IQR Outliers in {col_choice}")
+            st.pyplot(fig)
+
+        # -----------------------------
+        # Z-SCORE METHOD
+        # -----------------------------
+        else:
+            z_scores = zscore(df_clean[col_choice])
+            outliers = df_clean[np.abs(z_scores) > z_threshold]
+
+            st.success(f"Outliers detected: {outliers.shape[0]}")
+
+            # Scatter plot
+            fig, ax = plt.subplots(figsize=(5, 3))
+            ax.scatter(df_clean.index, df_clean[col_choice], alpha=0.6, label="Normal")
+            ax.scatter(outliers.index, outliers[col_choice], color="red", label="Outliers")
+            ax.set_title(f"Z-score Outliers in {col_choice}")
+            ax.legend()
+            st.pyplot(fig)
 
         # Show outlier table
         st.dataframe(outliers[[col_choice]].head(20))
-
-        # Scatter plot
-        fig, ax = plt.subplots(figsize=(5, 3))
-        ax.scatter(df_clean.index, df_clean[col_choice], alpha=0.6, label="Normal")
-        ax.scatter(outliers.index, outliers[col_choice], color="red", label="Outliers")
-        ax.set_title(f"Outliers in {col_choice}")
-        ax.legend()
-        st.pyplot(fig)
 
 
 # ---------------------------------------------------------
