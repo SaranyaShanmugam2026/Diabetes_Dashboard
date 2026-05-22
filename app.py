@@ -136,54 +136,43 @@ elif page == "cleaning":
     st.dataframe(df.isna().sum())
 
 # ---------------------------------------------------------
-# OUTLIERS PAGE
+# OUTLIERS PAGE (WITH FORM)
 # ---------------------------------------------------------
 elif page == "outliers":
 
-    # Histogram
-    st.subheader(f"Histogram of {col_choice}")
-    fig, ax = plt.subplots(figsize=(5, 3))
-    sns.histplot(df[col_choice].dropna(), kde=True, ax=ax)
-    st.pyplot(fig)
+    st.subheader("Outlier Detection")
 
-    st.markdown("---")
+    # Outlier Detection Form
+    with st.form("outlier_form"):
+        st.write("Select a column and threshold to detect outliers:")
 
-    # IQR
-    st.subheader(f"IQR Outliers for {col_choice}")
-    Q1 = df[col_choice].quantile(0.25)
-    Q3 = df[col_choice].quantile(0.75)
-    IQR = Q3 - Q1
-    lower = Q1 - 1.5 * IQR
-    upper = Q3 + 1.5 * IQR
+        col_choice = st.selectbox("Select column", df.columns[:-1])
+        z_threshold = st.slider("Z-score threshold", 2.0, 4.0, 3.0, 0.5)
 
-    outliers_iqr = df[(df[col_choice] < lower) | (df[col_choice] > upper)]
+        detect_btn = st.form_submit_button("Detect Outliers")
 
-    fig2, ax2 = plt.subplots(figsize=(5,3))
+    if detect_btn:
 
-    sns.boxplot(x=df[col_choice], ax=ax2)
-    st.pyplot(fig2)
+        # Clean data for selected column
+        df_clean = df.dropna(subset=[col_choice])
+        z_scores = zscore(df_clean[col_choice])
 
-    st.write(f"**IQR Range:** {lower:.2f} to {upper:.2f}")
-    st.dataframe(outliers_iqr[[col_choice]].dropna().head(20))
+        # Detect outliers
+        outliers = df_clean[np.abs(z_scores) > z_threshold]
 
-    st.markdown("---")
+        st.success(f"Outliers detected: {outliers.shape[0]}")
 
-    # Z-score
-    st.subheader(f"Z-score Outliers for {col_choice}")
-    df_clean = df.dropna(subset=[col_choice])
-    z_scores = zscore(df_clean[col_choice])
-    z_threshold = st.slider("Z-score threshold", 2.0, 4.0, 3.0, 0.5)
+        # Show outlier table
+        st.dataframe(outliers[[col_choice]].head(20))
 
-    outliers_z = df_clean[np.abs(z_scores) > z_threshold]
+        # Scatter plot
+        fig, ax = plt.subplots(figsize=(5, 3))
+        ax.scatter(df_clean.index, df_clean[col_choice], alpha=0.6, label="Normal")
+        ax.scatter(outliers.index, outliers[col_choice], color="red", label="Outliers")
+        ax.set_title(f"Outliers in {col_choice}")
+        ax.legend()
+        st.pyplot(fig)
 
-    fig3, ax3 = plt.subplots(figsize=(5,3))
-
-    ax3.scatter(df_clean.index, df_clean[col_choice], alpha=0.6)
-    ax3.scatter(outliers_z.index, outliers_z[col_choice], color="red")
-    st.pyplot(fig3)
-
-    st.write(f"**Z-score Outliers:** {outliers_z.shape[0]}")
-    st.dataframe(outliers_z[[col_choice]].head(20))
 
 # ---------------------------------------------------------
 # ANALYSIS PAGE
